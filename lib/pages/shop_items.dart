@@ -24,26 +24,42 @@ class ShopItemsWidget extends StatelessWidget {
       initialData: bloc.allItems,
       stream: bloc.getStream,
       builder: (context, snapshot) {
-        return snapshot.data["shop items"].length > 0
+        return snapshot.data["active"].length > 0
             ? shopItemsListBuilder(snapshot)
-            : Center(child: Text("All items in shop have been taken"));
+            : Column(
+                children: [
+                  Center(child: forText()),
+                  RaisedButton(
+                    onPressed: () {
+                      bloc.gettingvar();
+                      print(bloc.mm);
+                    },
+                    child: Text("Change var"),
+                  ),
+                ],
+              );
       },
     );
   }
 }
 
+Widget forText() {
+  return Text(bloc.mm.toString());
+}
+
 Widget shopItemsListBuilder(snapshot) {
   return ListView.builder(
-    itemCount: snapshot.data["shop items"].length,
+    itemCount: snapshot.data["active"].length,
     itemBuilder: (BuildContext context, i) {
-      final shopList = snapshot.data["shop items"];
+      final shopList = snapshot.data["active"];
       return ListTile(
-        title: Text(shopList[i]['name']),
-        subtitle: Text("\$${shopList[i]['price']}"),
+        title: Text(shopList[i]['value']),
+        // subtitle: Text("\$${shopList[i]['price']}"),
         trailing: IconButton(
           icon: Icon(Icons.add_shopping_cart),
           onPressed: () {
             bloc.addToCart(shopList[i]);
+            print(bloc.gettingvar());
           },
         ),
         onTap: () {},
