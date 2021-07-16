@@ -10,28 +10,32 @@ class CartItemsBloc {
   Stream get getStream => cartStreamController.stream;
 
   final Map allItems = {
-    'shop items': [
-      {'name': 'App dev kit', 'price': 20, 'id': 1},
-      {'name': 'App consultation', 'price': 100, 'id': 2},
-      {'name': 'Logo Design', 'price': 10, 'id': 3},
-      {'name': 'Code review', 'price': 90, 'id': 4},
+    'active': [
+      {
+        'value': 'true',
+      },
     ],
-    'cart items': []
+    'inactive': []
   };
+  bool mm = false;
+
+  bool gettingvar() {
+    mm == true ? mm = false : mm = true;
+  }
 
   void addToCart(item) {
-    allItems['shop items'].remove(item);
-    allItems['cart items'].add(item);
+    allItems['active'].remove(item);
+    allItems['inactive'].add(item);
     cartStreamController.sink.add(allItems);
   }
 
   void removeFromCart(item) {
-    allItems['cart items'].remove(item);
-    allItems['shop items'].add(item);
+    allItems['inactive'].remove(item);
+    allItems['active'].add(item);
     cartStreamController.sink.add(allItems);
   }
 
-  /// The [dispose] method is used 
+  /// The [dispose] method is used
   /// to automatically close the stream when the widget is removed from the widget tree
   void dispose() {
     cartStreamController.close(); // close our StreamController
